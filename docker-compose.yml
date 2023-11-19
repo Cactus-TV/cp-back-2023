@@ -3,13 +3,28 @@ version: '3.8'
 services:
   django-template:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     networks:
       - django_template
     ports:
       - 8000:8000
     env_file:
       - ./.env
+
+  db-postgres:
+    image: postgres:14.7-alpine
+    networks:
+      - django_template
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    restart: unless-stopped
+
 
 networks:
   django_template:
