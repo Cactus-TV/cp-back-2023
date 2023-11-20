@@ -16,15 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
+# from django.conf import settings
+# from django.conf.urls.static import static
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('back_bridge/', include('BackBridge.urls')),
-    path('back_images/', include('BackImageCV.urls')),
+    path('back-bridge/', include('BackBridge.urls')),
+    path('back-images/', include('BackImageCV.urls')),
 ]
 
-urlpatterns += static(f'{settings.MEDIA_URL}',
-                          document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(f'{settings.MEDIA_URL}',
+#                           document_root=settings.MEDIA_ROOT)

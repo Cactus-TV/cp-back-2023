@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "BackBridge",
-    "BackImageCV"
+    "BackImageCV",
+    "rest_framework",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -57,8 +59,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "django_template.urls"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+# MEDIA_URL = '/media/'
 
 TEMPLATES = [
     {
@@ -92,6 +94,13 @@ DATABASES = {
         "PORT": os.getenv('POSTGRES_PORT'),
     }
 }
+
+#Celery
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_TIMEZONE = "UTC"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30
 
 
 # Password validation
@@ -133,3 +142,52 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "propagate": True,
+        },
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "DjangoTemplate.BackBridge": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "filters": ["require_debug_true"],
+        },
+        "DjangoTemplate.BackImageCV": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "filters": ["require_debug_true"],
+        },
+    },
+}

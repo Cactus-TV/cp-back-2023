@@ -3,7 +3,8 @@ version: '3.8'
 services:
   django-template:
     build: .
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    # command: celery worker --app=core --loglevel=info
+    command: bash -c "python manage.py makemigrations && python manage.py migrate django_celery_results && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     networks:
       - django_template
     ports:
@@ -24,7 +25,7 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
     restart: unless-stopped
-
+    
 
 networks:
   django_template:
