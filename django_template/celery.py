@@ -3,7 +3,7 @@ from celery import Celery
 import cv2
 import numpy as np
 import logging
-from BackImageCV.forms import ImageForm
+from BackBridge.models import Image
 
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_template.settings')
@@ -25,15 +25,19 @@ app.autodiscover_tasks()
 #     print(f'Request: {self.request!r}')
 
 @app.task(default_retry_delay=3, max_retries=3, time_limit=5)
-def image_recognition(img, title):
+def image_recognition(title, img):
     try:
+        print('first', type(img), sep="\t")
         nparr = np.frombuffer(img, np.uint8)
         frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         #вызов нейронки
         image = cv2.imencode('.jpg', frame)[1].tobytes()
-        form = ImageForm(img, title)
-        if form.is_valid():
-            form.save()
+        print('second', type(image), sep="\t")
+
+        model = Image()
+        model.title = title
+        model.photo = image
+        model.save()
 
     except Celery.TimeLimitExceeded:
         logging.warning("Time limit exception")

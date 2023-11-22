@@ -6,8 +6,5 @@ from . import views
 
 
 urlpatterns = [
-   path('upload/', views.image_upload_view),
-   path('page/', views.PageView.as_view())
+   path('page/', views.image_upload_view),
 ]
-# urlpatterns += static(f'back_images/{settings.MEDIA_URL}',
-#                           document_root=settings.MEDIA_ROOT)
