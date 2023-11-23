@@ -1,12 +1,14 @@
 from django.http import HttpResponse
 from .models import Image
 from .serializers import ImageSerializer, AllImagesSerializer
-# import numpy as np
+import numpy as np
 import cv2
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.core.files.temp import NamedTemporaryFile
+from django.core.files import File
 # from django_template.celery import image_recognition
 from django.shortcuts import render
 
@@ -51,24 +53,23 @@ class OneImageAPI(APIView):
             # file = bytearray()
             # for chunk in photo.chunks():
             #     file.append(chunk)
-            # file = photo.read()
-
-            # nparr = np.frombuffer(file, np.uint8)
-            # frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-            # # вызов нейронки
-            # image = cv2.imencode('.jpg', frame)[1].tobytes()
+            file = photo.read()
+            nparr = np.frombuffer(file, np.uint8)
+            frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+            # вызов нейронки
+            image = cv2.imencode('.jpg', frame)[1].tobytes()
 
             model = Image()
             model.title = title
-            model.photo = photo
+            # model.photo = photo
+            # model.save()
+            img_temp = NamedTemporaryFile(delete=True)
+            img_temp.write(image)
+            model.photo.save(title + '.jpg', File(img_temp))
+            img_temp.flush()
             model.save()
-            # model.save()
-            # img_temp = NamedTemporaryFile(delete=True)
-            # img_temp.write(image)
-            # model.photo.save(title + '.jpg', File(img_temp))
-            # img_temp.flush()
-            # model.save()
-            # image_recognition.delay(form.data['title'], file)
+
+            # image_recognition.delay(form.data['title'], file) # celery
             return Response(status.HTTP_200_OK)
         except Exception:
             return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
