@@ -1,9 +1,5 @@
 from django.db import models
 import uuid
-# import os
-# from dotenv import load_dotenv
-
-# load_dotenv()
 
 
 class Image(models.Model):

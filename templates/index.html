@@ -1,27 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>TEST</title>
+	</head>
 
-<head>
-    <meta charset="UTF-8">
-    <title>TEST</title>
-</head>
+	<body>
+		<button id="btn2">Получить фото</button>
+		<input
+			type="text"
+			id="text_field"
+			required
+			minlength="8"
+			maxlength="32"
+			size="10"
+		/>
 
-<body>
-    <button id="btn2">Получить фото</button>
-    <input type="text" id="text_field" required minlength="8" maxlength="32" size="10" />
+		<img
+			src=""
+			id="img"
+			style="display: none"
+		/>
 
-    <img src="" id="img" style="display:none;">
-
-    <script>
-        document.getElementById("btn2").addEventListener("click", function(){
-        document.getElementById("img").style.display = "block";
-        var t = document.getElementById("text_field").value;
-        if (t != "")
-        {
-            document.getElementById("img").src=`back-images/image/get/${t}/`;
-        }
-        });
-    </script>
-</body>
-
+		<script>
+			document
+				.getElementById('btn2')
+				.addEventListener('click', function () {
+					document.getElementById('img').style.display = 'block';
+					var t = document.getElementById('text_field').value;
+					if (t != '') {
+						document.getElementById('img').src = `/get/${t}/`;
+					}
+				});
+		</script>
+	</body>
 </html>
