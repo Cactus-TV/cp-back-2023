@@ -1,3 +1,4 @@
+adrf==0.1.2
 amqp==5.2.0
 asgiref==3.7.2
 async-property==0.2.2
