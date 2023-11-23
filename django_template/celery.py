@@ -30,7 +30,7 @@ def image_recognition(title, img):
         print('first', type(img), sep="\t")
         nparr = np.frombuffer(img, np.uint8)
         frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        #вызов нейронки
+        # вызов нейронки
         image = cv2.imencode('.jpg', frame)[1].tobytes()
         print('second', type(image), sep="\t")
 

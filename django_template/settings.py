@@ -96,7 +96,7 @@ DATABASES = {
     }
 }
 
-#Celery
+# Celery
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_CACHE_BACKEND = 'django-cache'
 CELERY_TIMEZONE = "UTC"

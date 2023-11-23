@@ -1,5 +1,5 @@
 from django import forms
-from BackBridge.models import *
+from BackBridge.models import Image
 
 
 class ImageForm(forms.ModelForm):

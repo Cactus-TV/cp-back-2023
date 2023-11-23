@@ -2,7 +2,7 @@ import cv2
 from django.shortcuts import render
 import numpy as np
 from BackBridge.models import Image
-from django_template.celery import image_recognition
+# from django_template.celery import image_recognition
 from .forms import ImageForm
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
@@ -23,7 +23,7 @@ def image_upload_view(request):
             # print('first', type(file), sep="\t")
             nparr = np.frombuffer(file, np.uint8)
             frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-            #вызов нейронки
+            # вызов нейронки
             image = cv2.imencode('.jpg', frame)[1].tobytes()
             # print('second', type(image), sep="\t")
 
