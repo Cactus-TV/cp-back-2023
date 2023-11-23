@@ -29,12 +29,12 @@ def image_upload_view(request):
 
             model = Image()
             model.title = title
-            model.save()
+            # model.save()
             img_temp = NamedTemporaryFile(delete=True)
             img_temp.write(image)
-            img_temp.flush()
             model.photo.save(title + '.jpg', File(img_temp))
-
+            img_temp.flush()
+            model.save()
             # image_recognition.delay(form.data['title'], file)
     else:
         form = ImageForm()

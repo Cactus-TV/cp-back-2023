@@ -26,10 +26,9 @@ class AllImagesAPIGet(generics.ListAPIView):
 class OneImageAPIGet(APIView):
     permission_classes = [AllowAny]
         
-    @gzip.gzip_page
-    def get(self, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         try:
-            uid_photo = args['uid']
+            uid_photo = kwargs['pk']
             print('\n\n\n\n\n' + uid_photo + '\n\n\n\n\n')
             images = list(Image.objects.filter(Q(uid=uid_photo)))
             if len(images) == 0:
@@ -38,7 +37,7 @@ class OneImageAPIGet(APIView):
             image = cv2.imread(image_path)#mb problems with color
             jpeg = cv2.imencode('.jpg', image)[1]
             response = b'--frame\r\n'
-            b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n'
+            response += b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n'
             return HttpResponse(response, content_type="multipart/x-mixed-replace;boundary=frame")
         except:
             return Response(status.HTTP_405_METHOD_NOT_ALLOWED)

@@ -3,29 +3,29 @@ version: '3.8'
 services:
   django-template:
     build: .
-    # command: celery worker --app=core --loglevel=info
-    command: bash -c "python manage.py makemigrations && python manage.py migrate django_celery_results && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-    networks:
-      - django_template
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    container_name: django-template
+    volumes:
+      - .:/usr/src/app/
     ports:
       - 8000:8000
     env_file:
       - ./.env
+    depends_on:
+      - db-postgres
 
   db-postgres:
     image: postgres:14.7-alpine
-    networks:
-      - django_template
+    container_name: db-postgres
     environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: test
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=test
     ports:
       - "5432:5432"
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
-    
 
-networks:
-  django_template:
+volumes:
+  postgres_data:
