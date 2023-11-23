@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'django.contrib.postgres',
     "BackBridge",
-    "BackImageCV",
     "rest_framework",
     "django_celery_results",
 ]

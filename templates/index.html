@@ -7,12 +7,6 @@
 </head>
 
 <body>
-    <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button id="but" type="submit">Загрузить фото</button>
-    </form>
-
     <button id="btn2">Получить фото</button>
     <input type="text" id="text_field" required minlength="8" maxlength="32" size="10" />
 

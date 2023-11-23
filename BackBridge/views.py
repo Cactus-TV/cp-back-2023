@@ -9,6 +9,15 @@ from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import numpy as np
+# from django_template.celery import image_recognition
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
+from django.shortcuts import render
+
+
+def get_image(request):
+    return render(request, 'index.html')
 
 
 class OneImageAPIUpdate(generics.RetrieveUpdateDestroyAPIView):
@@ -23,7 +32,7 @@ class AllImagesAPIGet(generics.ListAPIView):
     permission_classes = [AllowAny]
 
 
-class OneImageAPIGet(APIView):
+class OneImageAPI(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
@@ -40,6 +49,36 @@ class OneImageAPIGet(APIView):
             response = b'--frame\r\n'
             response += b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n'
             return HttpResponse(response, content_type="multipart/x-mixed-replace;boundary=frame")
+        except Exception:
+            return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+    def post(self, request):
+        try:
+            title = request.data['title']
+            photo = request.FILES['photo']
+            # print(photo.tobytes())
+            # file = bytearray()
+            # for chunk in photo.chunks():
+            #     file.append(chunk)
+            file = photo.read()
+
+            # print('first', type(file), sep="\t")
+            nparr = np.frombuffer(file, np.uint8)
+            frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+            # вызов нейронки
+            image = cv2.imencode('.jpg', frame)[1].tobytes()
+            # print('second', type(image), sep="\t")
+
+            model = Image()
+            model.title = title
+            model.save()
+            img_temp = NamedTemporaryFile(delete=True)
+            img_temp.write(image)
+            model.photo.save(title + '.jpg', File(img_temp))
+            img_temp.flush()
+            # model.save()
+            # image_recognition.delay(form.data['title'], file)
+            return Response(status.HTTP_200_OK)
         except Exception:
             return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
     
