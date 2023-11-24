@@ -11,4 +11,4 @@ class ImageSerializer(ModelSerializer):
 class AllImagesSerializer(ModelSerializer):
     class Meta:
         model = Image
-        fields = ['uid', 'title', 'creation_date']
+        fields = ['uid', 'title', 'creation_date', 'is_ready']

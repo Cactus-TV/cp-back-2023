@@ -15,20 +15,23 @@ logger.setLevel(logging.DEBUG)
 
 
 @shared_task(default_retry_delay=3, max_retries=3)
-def image_recognition(name, title, file_str):
+def image_recognition(uid, title, file_str):
     try:
         logger.info("Processing result")
+        
         data = bytearray(base64.b64decode(file_str))
         file = np.frombuffer(data, np.uint8)
         image = cv2.imdecode(file, cv2.IMREAD_COLOR)
         # вызов нейронки
-        model = Image()
-        model.title = title
+
+        model = Image.objects.get(uid=uid)
         img_temp = NamedTemporaryFile(delete=True)
         img_temp.write(cv2.imencode('.jpg', image)[1].tobytes())
         model.photo.save(title + '.jpg', File(img_temp))
         img_temp.flush()
+        model.is_ready = True
         model.save()
+
         logger.info("Processing finished")
 
     except Exception as es:

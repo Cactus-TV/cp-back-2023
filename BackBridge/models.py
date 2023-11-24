@@ -6,6 +6,7 @@ class Image(models.Model):
     uid = models.UUIDField(default=uuid.uuid4, primary_key=True)
     title = models.CharField(blank=True, max_length=128)
     photo = models.ImageField(upload_to='images/%Y_%m_%d')
+    is_ready = models.BooleanField(default=False)
     creation_date = models.DateTimeField(auto_now_add=True)
 
     def delete(self, *args, **kwargs):

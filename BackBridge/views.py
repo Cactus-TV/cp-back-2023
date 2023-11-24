@@ -37,6 +37,8 @@ class OneImageAPI(APIView):
     def get(self, request, uid):
         try:
             image_model = Image.objects.get(uid=uid)
+            if not image_model.is_ready:
+                return Response(status.HTTP_404_NOT_FOUND)
             image_model.photo.open()
             image = cv2.imread(image_model.photo.path)
             _, jpeg = cv2.imencode('.jpg', image)
@@ -48,15 +50,18 @@ class OneImageAPI(APIView):
         try:
             title = request.data['title']
             photo = request.FILES['photo']
-            name = photo.name
             
             file = bytearray()
             for chunk in photo.chunks():
                 file.extend(chunk)
             file_str = base64.b64encode(file).decode()
+            # file = photo.read()  # works slower
 
-            # file = photo.read()
-            image_recognition.delay(name, title, file_str)  # celery
+            model = Image()
+            model.title = title
+            model.save()
+
+            image_recognition.delay(model.uid, title, file_str)  # celery
 
             return Response(status.HTTP_200_OK)
         except Exception as e:
