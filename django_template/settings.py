@@ -85,6 +85,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "http://0.0.0.0:8000",
+    "http://158.160.129.203:8000"
 ]
 
 CORS_URLS_REGEX = r'^/back-bridge/.*$'
