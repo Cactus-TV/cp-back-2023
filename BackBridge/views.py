@@ -9,8 +9,10 @@ from rest_framework.views import APIView
 from .tasks import image_recognition
 from django.shortcuts import render
 import base64
+from django.views.decorators import gzip
 
 
+@gzip.gzip_page
 def get_image(request):
     return render(request, 'index.html')
 
