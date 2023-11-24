@@ -3,7 +3,7 @@ version: '3.8'
 services:
   django-template:
     build: .
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py makemigrations && python manage.py makemigrations BackBridge && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     container_name: django-template
     volumes:
       - .:/usr/src/app/

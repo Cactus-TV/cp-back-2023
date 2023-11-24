@@ -12,8 +12,8 @@
 			id="text_field"
 			required
 			minlength="8"
-			maxlength="32"
-			size="10"
+			maxlength="64"
+			size="50"
 		/>
 
 		<img
@@ -29,7 +29,8 @@
 					document.getElementById('img').style.display = 'block';
 					var t = document.getElementById('text_field').value;
 					if (t != '') {
-						document.getElementById('img').src = `/get/${t}/`;
+						document.getElementById('img').src = `get/${t}/`;
+
 					}
 				});
 		</script>

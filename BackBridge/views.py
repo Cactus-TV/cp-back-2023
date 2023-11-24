@@ -21,6 +21,8 @@ class OneImageAPIUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
     permission_classes = [AllowAny]
+    # required to parse <str:uid> (replace url <std:pk> if you don't want use this field)
+    lookup_field = 'uid'
 
 
 class AllImagesAPIGet(generics.ListAPIView):
@@ -38,11 +40,13 @@ class OneImageAPI(APIView):
             image_model.photo.open()
             image = cv2.imread(image_model.photo.path)
             # mb problems with color
-            jpeg = cv2.imencode('.jpg', image)[1]
-            response = b'--frame\r\n'
-            response += b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n'
-            return HttpResponse(response, content_type="multipart/x-mixed-replace;boundary=frame")
-        except Exception:
+            # jpeg = cv2.imencode('.jpg', image)[1]
+            # response = b'--frame\r\n'
+            # response += b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n'
+            # return HttpResponse(response, content_type="multipart/x-mixed-replace;boundary=frame")
+            _, jpeg = cv2.imencode('.jpg', image)
+            return HttpResponse(jpeg.tobytes(), content_type="image/jpeg")
+        except Exception as e:
             return Response(status.HTTP_405_METHOD_NOT_ALLOWED)
     
     def post(self, request):
