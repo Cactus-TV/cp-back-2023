@@ -15,21 +15,46 @@ services:
       - ./.env
     depends_on:
       - db-postgres
+      - redis
 
   db-postgres:
     image: postgres:14.7-alpine
     container_name: db-postgres
     environment:
-      - POSTGRES_USER=test
-      - POSTGRES_PASSWORD=test
-      - POSTGRES_DB=test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DATABASE: test
+
     networks:
       - django_template
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
+
+  celery:
+    build: .
+    command: celery --app django_template worker --loglevel=info
+    container_name: celery
+    networks:
+      - django_template
+    volumes:
+      - .:/usr/src/app
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379
+      # CELERY_RESULT_BACKEND: redis://redis:6379
+    depends_on:
+      - django-template
+      - redis
+
+  redis:
+    image: redis:5-alpine
+    container_name: redis
+    networks:
+      - django_template
+    ports:
+      - 6379:6379
 
 volumes:
   postgres_data:
