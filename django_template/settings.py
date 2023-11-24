@@ -81,14 +81,15 @@ TEMPLATES = [
 WSGI_APPLICATION = "django_template.wsgi.application"
 
 # CORS
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "http://0.0.0.0:8000",
-    "http://158.160.129.203:8000"
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:8000",
+#     "http://127.0.0.1:8000",
+#     "http://0.0.0.0:8000",
+#     "http://158.160.129.203:8000"
+# ]
+CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_URLS_REGEX = r'^/back-bridge/.*$'
+# CORS_URLS_REGEX = r'^/back-bridge/.*$'
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
