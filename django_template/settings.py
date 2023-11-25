@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv("DJANGO_TOKEN")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0", "158.160.129.203"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0", "158.160.133.176"]
 
 
 # Application definition
@@ -81,15 +81,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "django_template.wsgi.application"
 
 # CORS
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:8000",
-#     "http://127.0.0.1:8000",
-#     "http://0.0.0.0:8000",
-#     "http://158.160.129.203:8000"
-# ]
 CORS_ALLOW_ALL_ORIGINS = True
 
-# CORS_URLS_REGEX = r'^/back-bridge/.*$'
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -126,10 +119,9 @@ DATABASES = {
 
 # Celery
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
-# CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 CELERY_TIMEZONE = "UTC"
 CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 30
+CELERY_TASK_TIME_LIMIT = 60
 
 
 # Password validation

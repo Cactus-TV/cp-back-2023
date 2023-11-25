@@ -14,7 +14,7 @@ logger = get_task_logger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-@shared_task(default_retry_delay=3, max_retries=3)
+@shared_task(default_retry_delay=30, max_retries=3)
 def image_recognition(uid, title, file_str):
     try:
         logger.info("Processing result")

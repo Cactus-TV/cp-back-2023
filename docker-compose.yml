@@ -27,8 +27,6 @@ services:
 
     networks:
       - django_template
-    # ports:
-    #   - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
@@ -43,7 +41,6 @@ services:
       - .:/usr/src/app
     environment:
       CELERY_BROKER_URL: redis://redis:6379
-      # CELERY_RESULT_BACKEND: redis://redis:6379
     depends_on:
       - django-template
       - redis
@@ -53,8 +50,6 @@ services:
     container_name: redis
     networks:
       - django_template
-    # ports:
-    #   - 6379:6379
 
 volumes:
   postgres_data:
